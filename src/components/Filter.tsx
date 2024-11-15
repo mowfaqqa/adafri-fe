@@ -1,21 +1,50 @@
-"use client";
-import { useState } from "react";
+import { StatusFilter } from "@/utils/interface";
 
-export default function Filters() {
-  const [status, setStatus] = useState("");
-  const [date, setDate] = useState("");
+interface CampaignFiltersProps {
+  filters: {
+    status: StatusFilter;
+    startDate: string;
+    endDate: string;
+  };
+  onFilterChange: (key: string, value: string) => void;
+}
 
+export function CampaignFilters({ filters, onFilterChange }: CampaignFiltersProps) {
   return (
-    <section>
-      <div className="flex gap-4">
-        <select className="border p-2 rounded" value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="">Select Status</option>
+    <div className="mb-4 flex flex-col md:flex-row text-sm gap-6 items-start md:items-center">
+      <div className="w-full md:w-auto">
+        <label className="font-semibold block mb-1">Filter by Status:</label>
+        <select
+          className="border p-2 text-sm rounded w-full md:w-auto"
+          value={filters.status}
+          onChange={(e) => onFilterChange('status', e.target.value)}
+        >
+          <option value="All">All</option>
           <option value="Active">Active</option>
-          <option value="Completed">Completed</option>
           <option value="Upcoming">Upcoming</option>
+          <option value="Completed">Completed</option>
         </select>
-        <input type="date" className="border p-2 rounded" value={date} onChange={(e) => setDate(e.target.value)} />
       </div>
-    </section>
+
+      <div className="w-full md:w-auto">
+        <label className="font-semibold text-sm block mb-1">Start Date:</label>
+        <input
+          type="date"
+          className="border p-2 text-sm rounded w-full"
+          value={filters.startDate}
+          onChange={(e) => onFilterChange('startDate', e.target.value)}
+        />
+      </div>
+
+      <div className="w-full md:w-auto">
+        <label className="font-semibold text-sm block mb-1">End Date:</label>
+        <input
+          type="date"
+          className="border p-2 text-sm rounded w-full"
+          value={filters.endDate}
+          onChange={(e) => onFilterChange('endDate', e.target.value)}
+        />
+      </div>
+    </div>
   );
 }
