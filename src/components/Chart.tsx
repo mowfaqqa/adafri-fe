@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
+import { useState, useEffect } from "react";
 
 const chartData = [
   { name: "Jan", clicks: 30 },
@@ -25,27 +26,40 @@ const chartData = [
 ];
 
 export default function CampaignChart() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000); // Simulate loading time
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <section className="bg-white p-6 rounded-lg shadow-md mt-6">
       <h2 className="text-xl font-bold mb-4">Total Clicks Per Month</h2>
-      <div className="overflow-x-auto">
-        <div className="min-w-[600px]">
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="clicks"
-                stroke="#8884d8"
-                strokeWidth={2}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <div className="spinner-border animate-spin inline-block w-12 h-12 border-4 border-blue-300 rounded-full" />
         </div>
-      </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <div className="min-w-[600px]">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="clicks"
+                  stroke="#8884d8"
+                  strokeWidth={2}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
